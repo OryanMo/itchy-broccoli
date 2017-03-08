@@ -1,0 +1,32 @@
+.selects-container{
+    width: 70%;
+    margin: 0 auto;
+    text-align: center;
+}
+.selects-container select{
+    width: 100%
+}
+select.ticketnum{
+    width: initial;
+}
+@media only screen and (max-device-width: 480px){
+    .image img{
+        width: 100%
+    }
+}
+
+body{
+    font-family: "Open Sans", Arial !important;
+}
+#loader{
+    -webkit-backface-visibility: hidden;
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    left: 50%;
+    margin-left: -100px;
+}
+
+.killprocess{
+    cursor: pointer;
+}
