@@ -91,4 +91,4 @@ for cinema in cinemasIterator:
 display.stop()
 db.close()
 
-Path('/root/itchy-broccoli/lastpopulated.data').touch()
+Path('lastpopulated.data').touch()
