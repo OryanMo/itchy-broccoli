@@ -38,11 +38,12 @@ while True:
     # Creating a PhantomJS connection
     driver = webdriver.PhantomJS(service_args=service_args)
     driver.set_window_size(1024,768)
+    print("Create webdriver")
     # Putting the code inside a try clause to catch any error
     try:
         # Navigating to the iframe
         driver.get(iframe)
-
+        print("Got iframe")
         # Some cinemas require you to choose the number of tickets you're going to buy
         try:
             # Getting the tickets select and selecting the number of tickets the user asked
