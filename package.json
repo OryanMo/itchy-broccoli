@@ -1,0 +1,28 @@
+{
+  "name": "itchy-broccoli",
+  "version": "2.0.0",
+  "description": "An app for saving movie seats",
+  "author": "Oryan Moshe <oryanmo167@gmail.com>",
+  "main": "server.js",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OryanMo/itchy-broccoli"
+  },
+  "bugs": {
+    "url": "https://github.com/OryanMo/itchy-broccoli/issues"
+  },
+  "keywords": [
+    "itchybroccoli",
+    "movies",
+    "itchu-broccoli"
+  ],
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express-session": "^1.15.1",
+    "greenlock-express": "^2.0.9",
+    "randomstring": "^1.1.5",
+    "sqlite3": "^3.1.8",
+    "urllib": "^2.21.0"
+  }
+}
