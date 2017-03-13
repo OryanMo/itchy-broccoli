@@ -8,7 +8,7 @@ from pyvirtualdisplay import Display
 from pathlib import Path
 
 
-db = sqlite3.connect('db/moviedb.db')
+db = sqlite3.connect('/root/itchy-broccoli/db/moviedb.db')
 cinemas = db.cursor()
 #cursor.execute('UPDATE movies SET lastupdate=(?) WHERE pid=' + str(pid), (str(datetime.datetime.now()).split('.')[0],))
 cinemas.execute('SELECT * FROM cinema')
@@ -29,6 +29,12 @@ service_args = [
             '--load-images=false',
             '--proxy-type=none',
                ]
+from selenium.webdriver.chrome.options import Options
+
+chrome_options = Options()
+
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-setuid-sandbox")
 
 display = Display(visible=0, size=(1024,768))
 display.start()
@@ -39,9 +45,9 @@ with open('/root/jquery.min.js', 'r') as jquery_js:
 
 for cinema in cinemasIterator:
     #driver = webdriver.PhantomJS(service_args=service_args)
-    driver = webdriver.Chrome()
-    #driver.set_window_size(1920,1080)
+    driver = webdriver.Chrome(chrome_options=chrome_options)
     print(cinema)
+    #driver.set_window_size(1920,1080)
     driver.get(cinema[2] + "presentationsJSON")
     sleep(3)
 
