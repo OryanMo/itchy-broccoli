@@ -43,58 +43,61 @@ jquery = ""
 with open('/root/jquery.min.js', 'r') as jquery_js:
     jquery = jquery_js.read()
 
-for cinema in cinemasIterator:
-    #driver = webdriver.PhantomJS(service_args=service_args)
-    driver = webdriver.Chrome(chrome_options=chrome_options)
-    print(cinema)
-    #driver.set_window_size(1920,1080)
-    driver.get(cinema[2] + "presentationsJSON")
-    sleep(3)
+try:
+    for cinema in cinemasIterator:
+        #driver = webdriver.PhantomJS(service_args=service_args)
+        driver = webdriver.Chrome(chrome_options=chrome_options)
+        print(cinema)
+        #driver.set_window_size(1920,1080)
+        driver.get(cinema[2] + "presentationsJSON")
+        sleep(3)
 
-    driver.execute_script(jquery)
+        driver.execute_script(jquery)
 
-    getAllData = 'return JSON.parse($.ajax({async:false, url:"presentationsJSON", data: {subSiteId : "", venueTypeId:"", showExpired:false}, method:"GET"}).responseText);'
+        getAllData = 'return JSON.parse($.ajax({async:false, url:"presentationsJSON", data: {subSiteId : "", venueTypeId:"", showExpired:false}, method:"GET"}).responseText);'
 
-    insert = db.cursor()
+        insert = db.cursor()
 
-    alldata = driver.execute_script(getAllData)
+        alldata = driver.execute_script(getAllData)
 
-    sites = []
-    features = []
-    presentations = []
+        sites = []
+        features = []
+        presentations = []
 
-    for site in alldata['sites']:
-        if 'tu' in site:
-            tu = site['tu']
-        else:
-            if site['si'] == 1010004:
-                tu = "https://tickets.yesplanet.co.il/ypj/?key=1073&ec=$PrsntCode$"
-            elif site['si'] == 1010005:
-                tu = "https://tickets.yesplanet.co.il/ypbs/?key=1074&ec=$PrsntCode$"
+        for site in alldata['sites']:
+            if 'tu' in site:
+                tu = site['tu']
             else:
-                tu = ""
+                if site['si'] == 1010004:
+                    tu = "https://tickets.yesplanet.co.il/ypj/?key=1073&ec=$PrsntCode$"
+                elif site['si'] == 1010005:
+                    tu = "https://tickets.yesplanet.co.il/ypbs/?key=1074&ec=$PrsntCode$"
+                else:
+                    tu = ""
 
-        sites.append((site['si'], site['sn'], site['vt'], cinema[0], tu))
+            sites.append((site['si'], site['sn'], site['vt'], cinema[0], tu))
 
-        for feature in site['fe']:
-            features.append((feature['dc'], feature['fn'], site['si']))
+            for feature in site['fe']:
+                features.append((feature['dc'], feature['fn'], site['si']))
 
-            for pres in feature['pr']:
-                presentations.append((pres['pc'], datetime.strptime(pres['dt'].split(' ')[0]+" " + pres['tm'], "%d/%m/%Y %H:%M"), feature['dc'], site['si']))
-
-
-    print(sites)
-    print(features)
-
-    insert.executemany('INSERT OR REPLACE INTO venue VALUES(?,?,?,?,?)', sites)
-    insert.executemany('INSERT OR REPLACE INTO feature VALUES(?,?,?)', features)
-    insert.executemany('INSERT OR REPLACE INTO presentation VALUES(?,?,?,?)', presentations)
-
-    db.commit()
+                for pres in feature['pr']:
+                    presentations.append((pres['pc'], datetime.strptime(pres['dt'].split(' ')[0]+" " + pres['tm'], "%d/%m/%Y %H:%M"), feature['dc'], site['si']))
 
 
-    driver.quit()
-display.stop()
-db.close()
+        print(sites)
+        print(features)
+
+        insert.executemany('INSERT OR REPLACE INTO venue VALUES(?,?,?,?,?)', sites)
+        insert.executemany('INSERT OR REPLACE INTO feature VALUES(?,?,?)', features)
+        insert.executemany('INSERT OR REPLACE INTO presentation VALUES(?,?,?,?)', presentations)
+
+        db.commit()
+
+        driver.quit()
+finally:
+    display.popen.terminate()
+    db.close()
+    if driver != None:
+        driver.quit()
 
 Path('lastpopulated.data').touch()
