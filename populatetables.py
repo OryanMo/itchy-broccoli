@@ -40,12 +40,13 @@ display = Display(visible=0, size=(1024,768))
 display.start()
 jquery = "" 
 
-with open('/root/jquery.min.js', 'r') as jquery_js:
+with open('jquery.min.js', 'r') as jquery_js:
     jquery = jquery_js.read()
 
 for cinema in cinemasIterator:
     #driver = webdriver.PhantomJS(service_args=service_args)
-    driver = webdriver.Chrome(chrome_options=chrome_options)
+    driver = webdriver.Chrome()
+    #driver = webdriver.Chrome(chrome_options=chrome_options)
     print(cinema)
     #driver.set_window_size(1920,1080)
     driver.get(cinema[2] + "presentationsJSON")
