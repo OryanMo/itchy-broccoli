@@ -86,7 +86,8 @@ while True:
             # Getting the next seat in line
             try:
                 currSeat = currSeat.find_element_by_xpath("../following-sibling::span/div[@class='seat']")
-            except:
+            except Exception as e:
+                print(str(e))
                 pass
 
         # Clicking the last submit
@@ -128,6 +129,7 @@ while True:
                 # Killing the process
                 os.kill(int(pid), signal.SIGKILL);
         except Exception as e:
+            print(str(e))
             pass
         finally:
             # Printing success message to screen
